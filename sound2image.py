@@ -49,6 +49,5 @@ plt.show()
 
 spect = np.stack([np.real(spect), np.imag(spect), np.zeros(spect.shape)], 2)
 normalize01(spect)
-# spect = np.real(np.abs(spect))
 
 plt.imsave(dir + '/' + 'spect.bmp', spect)

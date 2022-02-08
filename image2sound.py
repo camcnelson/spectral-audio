@@ -16,13 +16,12 @@ def normalize(data):
     data /= max(np.amax(data), abs(np.amin(data)))
     return data
 
-fs = 1
 rate = 44100
 data = plt.imread(file_path)
 print(data.shape)
 data = data[:,:,0] + 1j * data[:,:,1]
 
-tout, dataout = signal.istft(data, fs)
+tout, dataout = signal.istft(data)
 dataout = normalize(dataout)
 
 # plt.figure()

@@ -1,10 +1,7 @@
-import math
 import matplotlib.pyplot as plt
 import numpy as np
 from scipy import signal
-import scipy
 from scipy.io import wavfile
-from scipy import ndimage, misc
 
 import os
 dir = os.path.dirname(os.path.realpath(__file__))
@@ -62,20 +59,21 @@ plt.show()
 # spect = np.where(np.abs(spect) >= 1/100, spect, 0)
 
 # Convolution
-# weights = np.array([[0,0,0],[10,10,10],[0,0,0]])
+# weights = np.array([[0,10,0],[1,1,1],[0,0,0]])
 # spect = ndimage.convolve(spect,weights)
 
 # Dilation/Erosion
-spect = ndimage.grey_dilation(np.real(spect),1)
-# spect = ndimage.grey_erosion(np.real(spect),1)
+# spect = ndimage.grey_dilation(np.real(spect),1)
+# spect = ndimage.grey_erosion(np.real(spect),10)
 # spect = ndimage.grey_closing(np.real(spect),30)
 # spect = ndimage.grey_opening(np.real(spect),30)
 
 # Edge detection
+# spect = ndimage.sobel(spect)
 # spect = np.hypot(ndimage.sobel(spect,0), ndimage.sobel(spect,1))
 
 # Blurring
-# spect = ndimage.gaussian_filter(spect,0.1)
+# spect = ndimage.gaussian_filter(spect,1)
 
 
 
