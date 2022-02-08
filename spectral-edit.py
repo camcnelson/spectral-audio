@@ -39,9 +39,7 @@ data = normalizeByDType(data)
 if(len(data.shape)>1):
     data = data[:,0] # make mono
 
-fs = 1
-
-f, t, spect = signal.stft(data, fs, window='tukey')
+f, t, spect = signal.stft(data, window='tukey')
 plt.figure()
 plt.pcolormesh(t/rate, f, np.abs(spect), shading='gouraud')
 plt.ylim([f[1], f[-1]])
@@ -50,32 +48,37 @@ plt.ylabel('Frequency [Hz]')
 plt.xlabel('Time [sec]')
 plt.yscale('log')
 plt.show()
+
+
+
 
 # Do what you wish with the ndarray of spectral values
+# Some filters as a starting point: https://docs.scipy.org/doc/scipy-1.8.0/html-scipyorg/reference/ndimage.html#module-scipy.ndimage
+
+# Quick and dirty first step for some filters which can't take complex values
+# spect = np.real(spect)
+
+# Spectral noise gate
 # spect = np.where(np.abs(spect) >= 1/100, spect, 0)
-# spect = spect**0.5
-# spect = spect**3
 
-spect = np.real(spect)
+# Convolution
+# weights = np.array([[0,0,0],[10,10,10],[0,0,0]])
+# spect = ndimage.convolve(spect,weights)
 
-for i in range(1):
-    # weights = np.array([[0,0,0],[10,10,10],[0,0,0]])
-    # spect = ndimage.convolve(spect,weights)
+# Dilation/Erosion
+spect = ndimage.grey_dilation(np.real(spect),1)
+# spect = ndimage.grey_erosion(np.real(spect),1)
+# spect = ndimage.grey_closing(np.real(spect),30)
+# spect = ndimage.grey_opening(np.real(spect),30)
 
-    spect = ndimage.grey_dilation(np.real(spect),1)
-    # spect = ndimage.grey_erosion(np.real(spect),1)
-    # spect = ndimage.grey_closing(np.real(spect),30)
-    # spect = ndimage.grey_opening(np.real(spect),30)
+# Edge detection
+# spect = np.hypot(ndimage.sobel(spect,0), ndimage.sobel(spect,1))
 
-    # spect = np.hypot(ndimage.sobel(spect,0), ndimage.sobel(spect,1))
+# Blurring
+# spect = ndimage.gaussian_filter(spect,0.1)
 
-    # spect = ndimage.laplace(spect)
 
-    # spect = ndimage.prewitt(spect)
 
-    # spect = ndimage.gaussian_filter(spect,0.1)
-
-    # spect = ndimage.uniform_filter(spect,1)
 
 plt.figure()
 plt.pcolormesh(t/rate, f, np.abs(spect), shading='gouraud')
@@ -86,7 +89,7 @@ plt.xlabel('Time [sec]')
 plt.yscale('log')
 plt.show()
 
-tout, dataout = signal.istft(spect, fs)
+tout, dataout = signal.istft(spect)
 dataout = normalize(dataout)
 
 plt.figure()
