@@ -54,6 +54,10 @@ t, output = signal.istft(outspect, fs)
 
 # outspect = rfft(input1,nsamples) * rfft(input2,nsamples) # convolve
 # output = irfft(outspect)
+
+output = np.stack([output,output],1)
+output = np.asarray(output, dtype=np.float32)
+
 wavfile.write(dir + '/' + 'output.wav', rate, output)
 
 # plot amplitudes
